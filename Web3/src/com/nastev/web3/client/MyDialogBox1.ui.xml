@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+		.htmlDialogBox {
+			background-color: moccasin;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="{style.htmlDialogBox}">
+		<g:FlowPanel>
+			<g:Label text="Name?"/>
+			<g:TextBox ui:field="myTextBox1"/>
+			<g:TextBox/>
+			<g:Button text="OK" ui:field="buttonOK">New Button</g:Button>
+			<g:Button text="Cancel" ui:field="buttonCancel"/>
+		</g:FlowPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

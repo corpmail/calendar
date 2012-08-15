@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+		.myFlowPanel {
+			margin-bottom: 5px;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="gwt-Label" ui:field="myHtmlPanel">
+		<g:VerticalPanel width="1200" height="800" ui:field="myVerticalPanel">
+			<g:FlowPanel styleName="{style.myFlowPanel}">
+				<g:Button text="DAY" ui:field="b_day"/>
+				<g:Button text="WEEK" ui:field="b_week"/>
+				<g:Button text="MONTH" ui:field="b_month"/>
+				<g:Label text="DAY" ui:field="label"/>
+			</g:FlowPanel>
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 
