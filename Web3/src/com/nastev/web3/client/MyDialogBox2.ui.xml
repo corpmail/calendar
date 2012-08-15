@@ -2,11 +2,12 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client">
 	<ui:style>
+		
 	</ui:style>
 	<g:HTMLPanel>
-		<g:AbsolutePanel height="349px" ui:field="myAbsolutePanel">
+			<g:AbsolutePanel height="349px" ui:field="myAbsolutePanel">
 			<g:at left="10" top="49">
-				<g:Label text="Beschreibung"/>
+				<g:Label text="Bbschreibung"/>
 			</g:at>
 			<g:at left="116" top="239">
 				<g:Button text="Termin speichern" ui:field="buttonOK" width="241px" height="47px">New Button</g:Button>
@@ -21,7 +22,7 @@
 				<g:Label text="Termintyp"/>
 			</g:at>
 			<g:at left="116" top="77">
-				<g:ListBox width="95px" height="22px" ui:field="myList"/>
+				<g:ListBox width="95px" height="22px"/>
 			</g:at>
 			<g:at left="87" top="125">
 				<g:Label text="Ort"/>

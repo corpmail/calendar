@@ -127,6 +127,7 @@ public class Ui1 extends Composite {
 			public void onCreate(CreateEvent<Appointment> event) {
 
 				MyDialogBox1 box1 = new MyDialogBox1(calendar, event);
+				//MyDialogBox2 box1 = new MyDialogBox2();
 				box1.show();
 
 				// boolean commit = Window
