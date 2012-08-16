@@ -1,5 +1,5 @@
 /test
 /gwt-unitCache
-/war/WEB-INF
 *.cache
 *.cache.*
+*.symbolMap
