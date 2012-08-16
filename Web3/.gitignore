@@ -1,3 +1,5 @@
 /test
 /gwt-unitCache
-/war
+/war/WEB-INF
+*.cache
+*.cache.*

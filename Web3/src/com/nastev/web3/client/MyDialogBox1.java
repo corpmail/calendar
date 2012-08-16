@@ -101,5 +101,6 @@ public class MyDialogBox1 extends DialogBox {
 		this.event.setCancelled(true);
 		this.cal.doLayout();
 		this.hide();
+		
 	}
 }
