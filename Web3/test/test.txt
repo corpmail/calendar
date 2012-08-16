@@ -1,0 +1,4 @@
+-noserver -remoteUI "${gwt_remote_ui_server_port}:${unique_id}" 
+-startupUrl http://localhost/calendar/Web3/war/Web3.html 
+-logLevel INFO -codeServerPort 9997 -port 8888 
+-war C:\xampp\htdocs\calendar\Web3\war com.nastev.web3.Web3
