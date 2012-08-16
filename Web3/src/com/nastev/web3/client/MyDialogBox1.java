@@ -7,6 +7,12 @@ import com.bradrydzewski.gwt.calendar.client.CalendarViews;
 import com.bradrydzewski.gwt.calendar.client.event.CreateEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -36,6 +42,7 @@ public class MyDialogBox1 extends DialogBox {
 	@UiField DateBox myBis;
 	@UiField AbsolutePanel myAbsolutePanel;
 	@UiField ListBox myList;
+	@UiField Button button;
 
 	CreateEvent<Appointment> event;
 	Calendar cal;
@@ -102,5 +109,29 @@ public class MyDialogBox1 extends DialogBox {
 		this.cal.doLayout();
 		this.hide();
 		
+	}
+	@UiHandler("button")
+	void onButtonClick(ClickEvent event) {
+		
+		String url = "http://localhost/echo.php";
+		
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+		try {
+			//run it
+			builder.sendRequest("", new RequestCallback() {
+				
+				//if server was contacted, but returns HTTP error
+				public void onError(Request request, Throwable exception) {
+					//echo.setText("Error with HTTP code: " + exception.getMessage());
+				}
+				
+				//if everything is ok (HTTP code 200)
+				public void onResponseReceived(Request request,
+						Response response) {
+					myBeschreibung.setText(response.getText());
+				}});
+		} catch (RequestException e) {
+			myBeschreibung.setText("Exception: " + e.getMessage());
+		}
 	}
 }
