@@ -1,5 +1,6 @@
 package com.nastev.web3.client;
 
+import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
@@ -8,4 +9,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface GreetingServiceAsync {
 	void greetServer(String input, AsyncCallback<String> callback)
 			throws IllegalArgumentException;
+
+	void getAppointment(String name, AsyncCallback<Appointment> callback);
 }

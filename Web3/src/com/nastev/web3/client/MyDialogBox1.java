@@ -17,6 +17,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -26,11 +27,15 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ListBox;
+import com.nastev.web3.client.GreetingService;
+import com.nastev.web3.client.GreetingServiceAsync;
 
 public class MyDialogBox1 extends DialogBox {
 
 	private static MyDialogBox1UiBinder uiBinder = GWT
 			.create(MyDialogBox1UiBinder.class);
+	private final GreetingServiceAsync greetingService = GWT
+			.create(GreetingService.class);
 	@UiField
 	TextBox myBeschreibung;
 	@UiField
@@ -112,26 +117,17 @@ public class MyDialogBox1 extends DialogBox {
 	}
 	@UiHandler("button")
 	void onButtonClick(ClickEvent event) {
-		
-		String url = "http://localhost/echo.php";
-		
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
-		try {
-			//run it
-			builder.sendRequest("", new RequestCallback() {
-				
-				//if server was contacted, but returns HTTP error
-				public void onError(Request request, Throwable exception) {
-					//echo.setText("Error with HTTP code: " + exception.getMessage());
-				}
-				
-				//if everything is ok (HTTP code 200)
-				public void onResponseReceived(Request request,
-						Response response) {
-					myBeschreibung.setText(response.getText());
-				}});
-		} catch (RequestException e) {
-			myBeschreibung.setText("Exception: " + e.getMessage());
-		}
+		this.greetingService.getAppointment("asdf", new AsyncCallback<Appointment>() {
+
+            public void onFailure(Throwable caught) {
+              Window.alert("RPC to sendEmail() failed.");
+            }
+			@Override
+			public void onSuccess(Appointment result) {
+				// TODO Auto-generated method stub
+				cal.addAppointment(result);
+			}
+          });
+
 	}
 }
