@@ -20,7 +20,8 @@ public interface GreetingServiceAsync {
 	void getAppointments(String query,
 			AsyncCallback<ArrayList<Appointment>> callback);
 
-	void saveAppointmen(Appointment appt, AsyncCallback<Boolean> callback);
+	void saveAppointmen(Appointment appt, AsyncCallback<Integer> callback);	
+	void getAppointmentById(int Id, AsyncCallback<Appointment> callback);
 
-	void getAppointmentById(String Id, AsyncCallback<Appointment> callback);
+	void deleteAppointmen(Appointment appt, AsyncCallback<Boolean> callback);
 }

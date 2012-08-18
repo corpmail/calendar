@@ -41,12 +41,6 @@
 			<g:at left="156" top="286">
 				<p1:DateBox ui:field="myBis"/>
 			</g:at>
-			<g:at left="341" top="247">
-				<g:Button ui:field="button">NOW</g:Button>
-			</g:at>
-			<g:at left="397" top="247">
-				<g:Button ui:field="myDbButton">MyDb</g:Button>
-			</g:at>
 			<g:at left="116" top="78">
 				<g:TextArea width="314px" height="70px" ui:field="myBeschreibungLang"/>
 			</g:at>

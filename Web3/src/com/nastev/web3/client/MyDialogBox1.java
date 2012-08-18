@@ -48,10 +48,6 @@ public class MyDialogBox1 extends DialogBox {
 	@UiField
 	ListBox myList;
 	@UiField
-	Button button;
-	@UiField
-	Button myDbButton;
-	@UiField
 	TextArea myBeschreibungLang;
 
 	CreateEvent<Appointment> event;
@@ -86,31 +82,78 @@ public class MyDialogBox1 extends DialogBox {
 
 	@UiHandler("buttonOK")
 	void onButtonOKClick(ClickEvent event) {
-		Appointment app = this.event.getTarget();
+//		Appointment app = this.event.getTarget();
+//		app.setTitle(myBeschreibung.getText());
+//		// app.setStart(this.event.getTarget().getStart());
+//		// app.setEnd(this.event.getTarget().getEnd());
+//		app.setStart(this.myVon.getValue());
+//		app.setEnd(this.myBis.getValue());
+//
+//		String listType = this.myList.getItemText(this.myList
+//				.getSelectedIndex());
+//		System.out.println(listType);
+//		if (this.myList.getSelectedIndex() == 0) {
+//			app.setStyle(AppointmentStyle.BLUE);
+//
+//		}
+//		if (this.myList.getSelectedIndex() == 1) {
+//			app.setStyle(AppointmentStyle.LIGHT_PURPLE);
+//
+//		}
+//		if (this.myList.getSelectedIndex() == 2) {
+//			app.setStyle(AppointmentStyle.RED);
+//
+//		}
+//
+//		this.cal.addAppointment(app);
+//		this.hide();
+		
+
+		final Appointment app = new Appointment();
 		app.setTitle(myBeschreibung.getText());
-		// app.setStart(this.event.getTarget().getStart());
-		// app.setEnd(this.event.getTarget().getEnd());
+		app.setDescription(myBeschreibungLang.getText());
 		app.setStart(this.myVon.getValue());
 		app.setEnd(this.myBis.getValue());
 
-		String listType = this.myList.getItemText(this.myList
-				.getSelectedIndex());
-		System.out.println(listType);
-		if (this.myList.getSelectedIndex() == 0) {
-			app.setStyle(AppointmentStyle.BLUE);
+		this.greetingService.saveAppointmen(app, new AsyncCallback<Integer>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("RPC to sendEmail() failed.");
+			}
 
-		}
-		if (this.myList.getSelectedIndex() == 1) {
-			app.setStyle(AppointmentStyle.LIGHT_PURPLE);
+			@Override
+			// public void onSuccess(Integer result) {
+			// // TODO Auto-generated method stub
+			// //gen_key=result;
+			// }
+			public void onSuccess(Integer result) {
+				System.out.println("greetingService.getAppointments2" + result);
+				greetingService.getAppointmentById(result,
+						new AsyncCallback<Appointment>() {
+							public void onFailure(Throwable caught) {
+								Window.alert("RPC to getAppointments() failed.");
+							}
 
-		}
-		if (this.myList.getSelectedIndex() == 2) {
-			app.setStyle(AppointmentStyle.RED);
+							@Override
+							public void onSuccess(Appointment result) {
+								System.out
+										.println("greetingService.getAppointments3"
+												+ result.getTitle());
+								// ArrayList<Appointment> l1 = null;
+								// cal.suspendLayout();
+								cal.addAppointment(result);
+								// cal.resumeLayout();
+							}
 
-		}
+						});
+			}
 
-		this.cal.addAppointment(app);
+		});
+
 		this.hide();
+		
+		
+		
+		
 	}
 
 	@UiHandler("buttonCancel")
@@ -119,71 +162,6 @@ public class MyDialogBox1 extends DialogBox {
 		this.cal.doLayout();
 		this.hide();
 
-	}
-
-	@UiHandler("button")
-	void onButtonClick(ClickEvent event) {
-		this.greetingService.getAppointment("asdf",
-				new AsyncCallback<Appointment>() {
-
-					public void onFailure(Throwable caught) {
-						Window.alert("RPC to sendEmail() failed.");
-					}
-
-					@Override
-					public void onSuccess(Appointment result) {
-						// TODO Auto-generated method stub
-						cal.addAppointment(result);
-					}
-				});
-
-	}
-
-	@UiHandler("myDbButton")
-	void onMyDbButtonClick(ClickEvent event) {
-
-		final Appointment app = new Appointment();
-		app.setTitle(myBeschreibung.getText());
-		app.setDescription(myBeschreibungLang.getText());
-		app.setStart(this.myVon.getValue());
-		app.setEnd(this.myBis.getValue());
-
-		this.greetingService.saveAppointmen(app, new AsyncCallback<Boolean>() {
-			public void onFailure(Throwable caught) {
-				Window.alert("RPC to sendEmail() failed.");
-			}
-			@Override
-			public void onSuccess(Boolean result) {
-				//cal.addAppointment(app);
-			}
-		});
-		
-		
-		
-		
-		
-		greetingService.getAppointmentById("asdf", new AsyncCallback<Appointment>() {
-            public void onFailure(Throwable caught) {
-              Window.alert("RPC to getAppointments() failed.");
-            }
-			@Override
-			public void onSuccess(Appointment result) {
-				System.out.println("greetingService.getAppointments");
-				//ArrayList<Appointment> l1 = null;
-				cal.suspendLayout();
-				cal.addAppointment(result);
-				cal.resumeLayout();
-				
-			}
-
-          });
-		
-		
-		
-		
-		
-		
-		
 	}
 
 }

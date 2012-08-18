@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import com.nastev.web3.client.GreetingService;
 import com.nastev.web3.shared.FieldVerifier;
 //import com.nastev.web3.shared.MyAppointment;
@@ -21,6 +23,9 @@ import com.nastev.web3.server.MysqlHelper;
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
+	//Logger logger = Logger.getLogger("ParentLogger");
+	
+	//logger.log(Level.SEVERE, "this message should get logged");
 	
 	MysqlHelper mysql = MysqlHelper.getHelper();
 
@@ -202,11 +207,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		return list1;
 	}
 
-	public boolean saveAppointmen(Appointment appt)
+	public int saveAppointmen(Appointment appt)
 			throws IllegalArgumentException {
-		GWT.log("saveAppointmen_log "+appt.getTitle());
-		System.out.println("saveAppointmen_println "+appt.getTitle());
-		
+		//logger.log(Level.SEVERE, "saveAppointmen_log "+appt.getTitle());
 		MFQueries query = MFQueries.ADD_APPOINTMENT;
 		
 		java.util.Date dt_start = appt.getStart();
@@ -216,9 +219,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		String dt_end_converted = sdf.format(dt_end);
 
 		String[] args = new String[]{appt.getTitle(),appt.getDescription(),dt_start_converted,dt_end_converted};
-		
+		int gen_key = -1;
 		try {
-			mysql.executeUpdate(query, args);
+			gen_key= mysql.executeInsert(query, args);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -226,11 +229,11 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
+		return gen_key;
 	}
 
 	@Override
-	public Appointment getAppointmentById(String Id)
+	public Appointment getAppointmentById(int Id)
 			throws IllegalArgumentException {
 		Appointment appt = new Appointment();
 		try {
@@ -260,5 +263,29 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 			e.printStackTrace();
 		}
 		return appt;
+	}
+
+	@Override
+	public Boolean deleteAppointmen(Appointment appt)
+			throws IllegalArgumentException {
+		String DbId = appt.getId();
+		int anz = -1;
+
+		try {
+			anz = mysql.executeUpdate(MFQueries.DEL_APPOINTMENT,DbId);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		if (anz>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

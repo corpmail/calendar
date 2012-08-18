@@ -206,12 +206,30 @@ public class Ui1 extends Composite {
 		
 		calendar.addDeleteHandler(new DeleteHandler<Appointment>(){
 			  @Override
-			  public void onDelete(DeleteEvent<Appointment> event) {
+			  public void onDelete( DeleteEvent<Appointment> event) {
 			    boolean commit = Window.confirm("Are you sure you want to delete?");
 			    if(commit==false) {
 			      event.setCancelled(true);
 			    } else {
-			    	calendar.removeAppointment(event.getTarget());
+			    	final GreetingServiceAsync greetingService = GWT
+			    			.create(GreetingService.class);
+			    	greetingService.deleteAppointmen(event.getTarget(), new AsyncCallback<Boolean>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void onSuccess(Boolean result) {
+							// TODO Auto-generated method stub
+							//calendar.removeAppointment(event.getTarget());
+							
+						}
+			    		
+			    	});
+//			    	calendar.removeAppointment(event.getTarget());
 			    }
 			  }                     
 			});

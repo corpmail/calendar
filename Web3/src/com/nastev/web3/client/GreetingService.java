@@ -15,12 +15,13 @@ public interface GreetingService extends RemoteService {
 	String greetServer(String name) throws IllegalArgumentException;
 
 	Appointment getAppointment(String name) throws IllegalArgumentException;
-	Appointment getAppointmentById(String Id) throws IllegalArgumentException;
+	Appointment getAppointmentById(int Id) throws IllegalArgumentException;
 
 	Appointment getTerminCount(String name) throws IllegalArgumentException;
 
 	ArrayList<Appointment> getAppointments(String query)
 			throws IllegalArgumentException;
 
-	boolean saveAppointmen(Appointment appt) throws IllegalArgumentException;
+	int saveAppointmen(Appointment appt) throws IllegalArgumentException;
+	Boolean deleteAppointmen(Appointment appt) throws IllegalArgumentException;
 }

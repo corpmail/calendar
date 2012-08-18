@@ -5,11 +5,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.google.gwt.core.client.GWT;
 import com.nastev.web3.server.MFQueries;
 
 public class MysqlHelper {
@@ -19,6 +22,7 @@ public class MysqlHelper {
 	        private Connection con = null;
 	        private InitialContext ctx = null;
 	        private DataSource ds = null;
+	        //Logger logger = Logger.getLogger("myLogger");
 
 	        public static MysqlHelper getHelper(){
 	                if (helper == null) {
@@ -90,6 +94,43 @@ public class MysqlHelper {
 	                ResultSet res = pstmt.executeQuery();
 	                return res;
 	        }
+	        
+	        
+	        public int executeInsert(MFQueries query, String...args) throws Exception{
+                PreparedStatement pstmt = con.prepareStatement(query.getSqlQuery());
+                for(int i=0;i<query.getTypes().length;i++){
+                        switch (query.getTypes()[i]) {
+                        case CHAR:
+                        case VARCHAR:
+                                pstmt.setString(i+1, args[i]);
+                                break;
+                        
+                        case INT:
+                                pstmt.setInt(i+1, Integer.parseInt(args[i]));
+
+                        default:
+                                break;
+                        }
+                }
+                int autoIncKeyFromApi = 0;
+                
+                int count = pstmt.executeUpdate();
+                //ResultSet rs = pstmt.getGeneratedKeys();
+                ResultSet rs = pstmt.executeQuery("SELECT LAST_INSERT_ID()");
+                if (rs.next()) {
+                    autoIncKeyFromApi = rs.getInt(1);
+                } else {
+
+                }
+                System.out.println("executeInsert1:");
+                //logger.log(Level.SEVERE, "executeInsert2:");
+                GWT.log("executeInsert3:");
+                
+                return autoIncKeyFromApi;
+        }
+	        
+	        
+	        
 	        public static void main(String args[]) throws ClassNotFoundException, SQLException, NamingException{
 	        	MysqlHelper helper = getHelper();
 	                ResultSet res = helper.executeQuery("select * from user");

@@ -1,2 +1,2 @@
 serviceClass: com.nastev.web3.client.GreetingService
-path: D9FB8FFCC270D4F3E3315D8EEAF71808.gwt.rpc
+path: B5C180D539F63D8C67D294217A61BF6B.gwt.rpc
