@@ -1,6 +1,8 @@
 package com.nastev.web3.client;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.bradrydzewski.gwt.calendar.client.AppointmentStyle;
@@ -25,6 +27,7 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
@@ -36,6 +39,8 @@ import com.google.gwt.user.client.ui.Label;
 public class Ui1 extends Composite {
 
 	private static Ui1UiBinder uiBinder = GWT.create(Ui1UiBinder.class);
+	private final GreetingServiceAsync greetingService = GWT
+			.create(GreetingService.class);
 	@UiField
 	HTMLPanel myHtmlPanel;
 	@UiField
@@ -79,6 +84,30 @@ public class Ui1 extends Composite {
 		calendar.setView(CalendarViews.DAY, 7);
 		myVerticalPanel.add(calendar);
 
+		
+		
+		greetingService.getAppointments("asdf", new AsyncCallback<ArrayList<Appointment>>() {
+            public void onFailure(Throwable caught) {
+              Window.alert("RPC to getAppointments() failed.");
+            }
+			@Override
+			public void onSuccess(ArrayList<Appointment> result) {
+				System.out.println("greetingService.getAppointments");
+				//ArrayList<Appointment> l1 = null;
+				calendar.suspendLayout();
+				calendar.addAppointments(result);
+				calendar.resumeLayout();
+				
+			}
+
+          });
+		
+
+		
+		
+		
+		
+		
 		calendar.addTimeBlockClickHandler(new TimeBlockClickHandler<Date>() {
 			@Override
 			public void onTimeBlockClick(TimeBlockClickEvent<Date> event) {

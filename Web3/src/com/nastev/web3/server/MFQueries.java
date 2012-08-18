@@ -4,7 +4,8 @@ public enum MFQueries {
 
     GET_USER_FROM_UID("select user_id, user_name from user where user_id = ?", MFDataType.CHAR),
     GET_USER_FROM_NAME("select user_id, user_name from user where user_name = ?",MFDataType.CHAR),
-    ADD_USER("insert into user(user_id, user_name) values(?,?)",MFDataType.CHAR,MFDataType.CHAR);
+    ADD_USER("insert into user(user_id, user_name) values(?,?)",MFDataType.CHAR,MFDataType.CHAR),
+    ADD_APPOINTMENT("insert into termin(bezeichnung, bezeichnung_lang,startdate,enddate) values(?,?,?,?)",MFDataType.CHAR,MFDataType.CHAR,MFDataType.CHAR,MFDataType.CHAR);
     
     ;
     

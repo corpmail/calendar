@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.nastev.web3.client.GreetingService;
 import com.nastev.web3.client.GreetingServiceAsync;
+//import com.nastev.web3.shared.MyAppointment;
+import com.google.gwt.user.client.ui.TextArea;
 
 public class MyDialogBox1 extends DialogBox {
 
@@ -48,7 +50,8 @@ public class MyDialogBox1 extends DialogBox {
 	@UiField AbsolutePanel myAbsolutePanel;
 	@UiField ListBox myList;
 	@UiField Button button;
-	@UiField Button button_1;
+	@UiField Button myDbButton;
+	@UiField TextArea myBeschreibungLang;
 
 	CreateEvent<Appointment> event;
 	Calendar cal;
@@ -131,21 +134,41 @@ public class MyDialogBox1 extends DialogBox {
           });
 
 	}
-	@UiHandler("button_1")
-	void onButton_1Click(ClickEvent event) {
-		this.greetingService.getTerminCount("asdf", new AsyncCallback<Appointment>() {
-
-            public void onFailure(Throwable caught) {
-              Window.alert("RPC to sendEmail() failed.");
-            }
-			@Override
-			public void onSuccess(Appointment result) {
-				// TODO Auto-generated method stub
-				//cal.addAppointment(result);
-				cal.addAppointment(result);
-			}
-
-          });
+	@UiHandler("myDbButton")
+	void onMyDbButtonClick(ClickEvent event) {
+//		this.greetingService.getTerminCount("asdf", new AsyncCallback<Appointment>() {
+//
+//            public void onFailure(Throwable caught) {
+//              Window.alert("RPC to sendEmail() failed.");
+//            }
+//			@Override
+//			public void onSuccess(Appointment result) {
+//				// TODO Auto-generated method stub
+//				//cal.addAppointment(result);
+//				cal.addAppointment(result);
+//			}
+//
+//          });
+		
+//		final MyAppointment app =  this.event.getTarget();
+//		//final MyAppointment app =  new MyAppointment();
+//		app.setTitle(myBeschreibung.getText());
+//		app.setDescription(myBeschreibungLang.getText());
+//		app.setStart(this.myVon.getValue());
+//		app.setEnd(this.myBis.getValue());
+		
+//		this.greetingService.saveAppointmen(app, new AsyncCallback<Boolean>() {
+//
+//            public void onFailure(Throwable caught) {
+//              Window.alert("RPC to sendEmail() failed.");
+//            }
+//			@Override
+//			public void onSuccess(Boolean result) {
+//				// TODO Auto-generated method stub
+//				cal.addAppointment(app);
+//			}
+//
+//          });
 		
 	}
 }

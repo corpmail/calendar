@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,6 +16,7 @@ import javax.sql.DataSource;
 
 import com.nastev.web3.client.GreetingService;
 import com.nastev.web3.shared.FieldVerifier;
+//import com.nastev.web3.shared.MyAppointment;
 import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.bradrydzewski.gwt.calendar.client.AppointmentStyle;
 import com.google.gwt.core.client.GWT;
@@ -132,7 +135,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
              startdate = rs.getString("startdate");
              enddate = rs.getString("enddate");
             
-            System.out.println("Abfrage: "+bezeichnung);
+            System.out.println("Abfrage: "+rs.getString("bezeichnung"));
             System.out.println("Abfrage: "+startdate);
             System.out.println("Abfrage: "+enddate);
             }//end while loop
@@ -171,4 +174,56 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		
 		return appt;
 	}
+
+	@Override
+	public ArrayList<Appointment> getAppointments(String query)
+			throws IllegalArgumentException {
+//		System.out.println("getAppointments0:");
+		ArrayList<Appointment> list1 = new ArrayList<Appointment>();
+		
+		try {
+			ResultSet rs = mysql.executeQuery("SELECT * FROM termin");
+//			System.out.println("getAppointments1:");
+			
+			while(rs.next()){
+//				System.out.println("getAppointments2: "+rs.getString("bezeichnung"));
+				
+				Appointment appt = new Appointment();
+				
+				appt.setTitle(rs.getString("bezeichnung"));
+				appt.setDescription(rs.getString("bezeichnung_lang"));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    		appt.setStart(simpleDateFormat.parse(rs.getString("startdate")));
+				appt.setEnd(simpleDateFormat.parse(rs.getString("enddate")));
+				appt.setStyle(AppointmentStyle.GREEN);
+				
+				
+				list1.add(appt);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list1;
+	}
+
+//	public boolean saveAppointmen(MyAppointment appt)
+//			throws IllegalArgumentException {
+//		
+//		MFQueries query = MFQueries.ADD_APPOINTMENT;
+//		String[] args = new String[]{appt.getTitle(),appt.getDescription(),appt.getStart().toString(),appt.getEnd().toString()};
+//		
+//		try {
+//			mysql.executeQuery(query, args);
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return true;
+//	}
 }
