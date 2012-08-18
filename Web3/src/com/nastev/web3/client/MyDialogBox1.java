@@ -1,27 +1,20 @@
 package com.nastev.web3.client;
 
+import java.util.ArrayList;
+
 import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.bradrydzewski.gwt.calendar.client.AppointmentStyle;
 import com.bradrydzewski.gwt.calendar.client.Calendar;
-import com.bradrydzewski.gwt.calendar.client.CalendarViews;
 import com.bradrydzewski.gwt.calendar.client.event.CreateEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -44,14 +37,22 @@ public class MyDialogBox1 extends DialogBox {
 	Button buttonOK;
 	@UiField
 	Button buttonCancel;
-	@UiField TextBox myOrt;
-	@UiField DateBox myVon;
-	@UiField DateBox myBis;
-	@UiField AbsolutePanel myAbsolutePanel;
-	@UiField ListBox myList;
-	@UiField Button button;
-	@UiField Button myDbButton;
-	@UiField TextArea myBeschreibungLang;
+	@UiField
+	TextBox myOrt;
+	@UiField
+	DateBox myVon;
+	@UiField
+	DateBox myBis;
+	@UiField
+	AbsolutePanel myAbsolutePanel;
+	@UiField
+	ListBox myList;
+	@UiField
+	Button button;
+	@UiField
+	Button myDbButton;
+	@UiField
+	TextArea myBeschreibungLang;
 
 	CreateEvent<Appointment> event;
 	Calendar cal;
@@ -76,11 +77,10 @@ public class MyDialogBox1 extends DialogBox {
 		this.center();
 		this.myVon.setValue(this.event.getTarget().getStart());
 		this.myBis.setValue(this.event.getTarget().getEnd());
-		
+
 		this.myList.addItem("Training");
 		this.myList.addItem("Spielen");
 		this.myList.addItem("Sex");
-		
 
 	}
 
@@ -88,26 +88,27 @@ public class MyDialogBox1 extends DialogBox {
 	void onButtonOKClick(ClickEvent event) {
 		Appointment app = this.event.getTarget();
 		app.setTitle(myBeschreibung.getText());
-//		app.setStart(this.event.getTarget().getStart());
-//		app.setEnd(this.event.getTarget().getEnd());
+		// app.setStart(this.event.getTarget().getStart());
+		// app.setEnd(this.event.getTarget().getEnd());
 		app.setStart(this.myVon.getValue());
 		app.setEnd(this.myBis.getValue());
-		
-		String listType = this.myList.getItemText(this.myList.getSelectedIndex());
+
+		String listType = this.myList.getItemText(this.myList
+				.getSelectedIndex());
 		System.out.println(listType);
-		if (this.myList.getSelectedIndex() == 0){
+		if (this.myList.getSelectedIndex() == 0) {
 			app.setStyle(AppointmentStyle.BLUE);
 
 		}
-		if (this.myList.getSelectedIndex() == 1){
+		if (this.myList.getSelectedIndex() == 1) {
 			app.setStyle(AppointmentStyle.LIGHT_PURPLE);
 
 		}
-		if (this.myList.getSelectedIndex() == 2){
+		if (this.myList.getSelectedIndex() == 2) {
 			app.setStyle(AppointmentStyle.RED);
 
 		}
-		
+
 		this.cal.addAppointment(app);
 		this.hide();
 	}
@@ -117,58 +118,72 @@ public class MyDialogBox1 extends DialogBox {
 		this.event.setCancelled(true);
 		this.cal.doLayout();
 		this.hide();
-		
+
 	}
+
 	@UiHandler("button")
 	void onButtonClick(ClickEvent event) {
-		this.greetingService.getAppointment("asdf", new AsyncCallback<Appointment>() {
+		this.greetingService.getAppointment("asdf",
+				new AsyncCallback<Appointment>() {
 
+					public void onFailure(Throwable caught) {
+						Window.alert("RPC to sendEmail() failed.");
+					}
+
+					@Override
+					public void onSuccess(Appointment result) {
+						// TODO Auto-generated method stub
+						cal.addAppointment(result);
+					}
+				});
+
+	}
+
+	@UiHandler("myDbButton")
+	void onMyDbButtonClick(ClickEvent event) {
+
+		final Appointment app = new Appointment();
+		app.setTitle(myBeschreibung.getText());
+		app.setDescription(myBeschreibungLang.getText());
+		app.setStart(this.myVon.getValue());
+		app.setEnd(this.myBis.getValue());
+
+		this.greetingService.saveAppointmen(app, new AsyncCallback<Boolean>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("RPC to sendEmail() failed.");
+			}
+			@Override
+			public void onSuccess(Boolean result) {
+				//cal.addAppointment(app);
+			}
+		});
+		
+		
+		
+		
+		
+		greetingService.getAppointmentById("asdf", new AsyncCallback<Appointment>() {
             public void onFailure(Throwable caught) {
-              Window.alert("RPC to sendEmail() failed.");
+              Window.alert("RPC to getAppointments() failed.");
             }
 			@Override
 			public void onSuccess(Appointment result) {
-				// TODO Auto-generated method stub
+				System.out.println("greetingService.getAppointments");
+				//ArrayList<Appointment> l1 = null;
+				cal.suspendLayout();
 				cal.addAppointment(result);
+				cal.resumeLayout();
+				
 			}
-          });
 
-	}
-	@UiHandler("myDbButton")
-	void onMyDbButtonClick(ClickEvent event) {
-//		this.greetingService.getTerminCount("asdf", new AsyncCallback<Appointment>() {
-//
-//            public void onFailure(Throwable caught) {
-//              Window.alert("RPC to sendEmail() failed.");
-//            }
-//			@Override
-//			public void onSuccess(Appointment result) {
-//				// TODO Auto-generated method stub
-//				//cal.addAppointment(result);
-//				cal.addAppointment(result);
-//			}
-//
-//          });
+          });
 		
-//		final MyAppointment app =  this.event.getTarget();
-//		//final MyAppointment app =  new MyAppointment();
-//		app.setTitle(myBeschreibung.getText());
-//		app.setDescription(myBeschreibungLang.getText());
-//		app.setStart(this.myVon.getValue());
-//		app.setEnd(this.myBis.getValue());
 		
-//		this.greetingService.saveAppointmen(app, new AsyncCallback<Boolean>() {
-//
-//            public void onFailure(Throwable caught) {
-//              Window.alert("RPC to sendEmail() failed.");
-//            }
-//			@Override
-//			public void onSuccess(Boolean result) {
-//				// TODO Auto-generated method stub
-//				cal.addAppointment(app);
-//			}
-//
-//          });
+		
+		
+		
+		
 		
 	}
+
 }

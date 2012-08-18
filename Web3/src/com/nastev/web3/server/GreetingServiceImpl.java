@@ -1,26 +1,16 @@
 package com.nastev.web3.server;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 import com.nastev.web3.client.GreetingService;
 import com.nastev.web3.shared.FieldVerifier;
 //import com.nastev.web3.shared.MyAppointment;
 import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.bradrydzewski.gwt.calendar.client.AppointmentStyle;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import com.nastev.web3.server.MysqlHelper;
@@ -107,7 +97,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Appointment getTerminCount(String name) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		String Erg = "asdf12345";
 		
 		
 		//
@@ -189,8 +178,9 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 //				System.out.println("getAppointments2: "+rs.getString("bezeichnung"));
 				
 				Appointment appt = new Appointment();
-				
-				appt.setTitle(rs.getString("bezeichnung"));
+				String AppId=""+rs.getInt("id");
+				appt.setId(AppId);
+				appt.setTitle(rs.getString("bezeichnung") + "ID:" + AppId);
 				appt.setDescription(rs.getString("bezeichnung_lang"));
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    		appt.setStart(simpleDateFormat.parse(rs.getString("startdate")));
@@ -212,18 +202,63 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		return list1;
 	}
 
-//	public boolean saveAppointmen(MyAppointment appt)
-//			throws IllegalArgumentException {
-//		
-//		MFQueries query = MFQueries.ADD_APPOINTMENT;
-//		String[] args = new String[]{appt.getTitle(),appt.getDescription(),appt.getStart().toString(),appt.getEnd().toString()};
-//		
-//		try {
-//			mysql.executeQuery(query, args);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return true;
-//	}
+	public boolean saveAppointmen(Appointment appt)
+			throws IllegalArgumentException {
+		GWT.log("saveAppointmen_log "+appt.getTitle());
+		System.out.println("saveAppointmen_println "+appt.getTitle());
+		
+		MFQueries query = MFQueries.ADD_APPOINTMENT;
+		
+		java.util.Date dt_start = appt.getStart();
+		java.util.Date dt_end = appt.getEnd();
+		java.text.SimpleDateFormat sdf =   new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dt_start_converted = sdf.format(dt_start);
+		String dt_end_converted = sdf.format(dt_end);
+
+		String[] args = new String[]{appt.getTitle(),appt.getDescription(),dt_start_converted,dt_end_converted};
+		
+		try {
+			mysql.executeUpdate(query, args);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	@Override
+	public Appointment getAppointmentById(String Id)
+			throws IllegalArgumentException {
+		Appointment appt = new Appointment();
+		try {
+			ResultSet rs = mysql.executeQuery("SELECT * FROM termin where id="+Id);
+//			System.out.println("getAppointments1:");
+			
+			while(rs.next()){
+//				System.out.println("getAppointments2: "+rs.getString("bezeichnung"));
+				
+				//appt = new Appointment();
+				String AppId=""+rs.getInt("id");
+				appt.setId(AppId);
+				appt.setTitle(rs.getString("bezeichnung") + "ID:" + AppId);
+				appt.setDescription(rs.getString("bezeichnung_lang"));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    		appt.setStart(simpleDateFormat.parse(rs.getString("startdate")));
+				appt.setEnd(simpleDateFormat.parse(rs.getString("enddate")));
+				appt.setStyle(AppointmentStyle.GREEN);
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return appt;
+	}
 }
