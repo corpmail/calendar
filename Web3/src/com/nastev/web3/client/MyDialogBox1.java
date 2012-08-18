@@ -48,6 +48,7 @@ public class MyDialogBox1 extends DialogBox {
 	@UiField AbsolutePanel myAbsolutePanel;
 	@UiField ListBox myList;
 	@UiField Button button;
+	@UiField Button button_1;
 
 	CreateEvent<Appointment> event;
 	Calendar cal;
@@ -129,5 +130,22 @@ public class MyDialogBox1 extends DialogBox {
 			}
           });
 
+	}
+	@UiHandler("button_1")
+	void onButton_1Click(ClickEvent event) {
+		this.greetingService.getTerminCount("asdf", new AsyncCallback<Appointment>() {
+
+            public void onFailure(Throwable caught) {
+              Window.alert("RPC to sendEmail() failed.");
+            }
+			@Override
+			public void onSuccess(Appointment result) {
+				// TODO Auto-generated method stub
+				//cal.addAppointment(result);
+				cal.addAppointment(result);
+			}
+
+          });
+		
 	}
 }

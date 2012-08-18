@@ -11,4 +11,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GreetingService extends RemoteService {
 	String greetServer(String name) throws IllegalArgumentException;
 	Appointment getAppointment(String name) throws IllegalArgumentException;
+	Appointment  getTerminCount(String name) throws IllegalArgumentException;
 }

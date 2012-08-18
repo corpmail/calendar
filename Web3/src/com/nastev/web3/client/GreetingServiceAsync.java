@@ -11,4 +11,6 @@ public interface GreetingServiceAsync {
 			throws IllegalArgumentException;
 
 	void getAppointment(String name, AsyncCallback<Appointment> callback);
+
+	void getTerminCount(String name, AsyncCallback<Appointment> callback);
 }

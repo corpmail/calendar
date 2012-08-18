@@ -41,8 +41,11 @@
 			<g:at left="116" top="191">
 				<p1:DateBox ui:field="myBis"/>
 			</g:at>
-			<g:at left="355" top="154">
+			<g:at left="301" top="152">
 				<g:Button ui:field="button">NOW</g:Button>
+			</g:at>
+			<g:at left="357" top="152">
+				<g:Button ui:field="button_1">MyDb</g:Button>
 			</g:at>
 		</g:AbsolutePanel>
 	</g:HTMLPanel>
