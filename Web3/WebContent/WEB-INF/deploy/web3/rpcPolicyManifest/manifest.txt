@@ -1,3 +1,2 @@
 # Module web3
 # RPC service class, partial path of RPC policy file
-com.nastev.web3.client.GreetingService, B5C180D539F63D8C67D294217A61BF6B.gwt.rpc

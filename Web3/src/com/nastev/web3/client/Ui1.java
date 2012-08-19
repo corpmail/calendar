@@ -13,6 +13,8 @@ import com.bradrydzewski.gwt.calendar.client.CalendarSettings.Click;
 import com.bradrydzewski.gwt.calendar.client.CalendarViews;
 import com.bradrydzewski.gwt.calendar.client.event.CreateEvent;
 import com.bradrydzewski.gwt.calendar.client.event.CreateHandler;
+import com.bradrydzewski.gwt.calendar.client.event.DateRequestEvent;
+import com.bradrydzewski.gwt.calendar.client.event.DateRequestHandler;
 import com.bradrydzewski.gwt.calendar.client.event.DeleteEvent;
 import com.bradrydzewski.gwt.calendar.client.event.DeleteHandler;
 import com.bradrydzewski.gwt.calendar.client.event.TimeBlockClickEvent;
@@ -23,6 +25,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
@@ -37,6 +41,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.datepicker.client.DatePicker;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Ui1 extends Composite {
 
@@ -53,8 +59,16 @@ public class Ui1 extends Composite {
 	Button b_week;
 	@UiField
 	Button b_month;
-	@UiField
-	Label label;
+	@UiField Button previsousDayButton;
+	@UiField Button nextDayButton;
+	@UiField Button previsousWeekButton;
+	@UiField Button previsousMonthButton;
+	@UiField Button nextWeekButton;
+	@UiField Button nextMonthButton;
+	@UiField DatePicker datePicker;
+	@UiField VerticalPanel myVerticalPanel2;
+	@UiField VerticalPanel myVerticalPanel3;
+	@UiField SimplePanel mySimplePanel;
 	Calendar calendar = null;
 	CalendarSettings settings = null;
 
@@ -63,11 +77,15 @@ public class Ui1 extends Composite {
 
 	public Ui1() {
 		initWidget(uiBinder.createAndBindUi(this));
+		
+		datePicker.setValue(new Date());
 		calendar = new Calendar();
 		calendar.setDate(new Date()); // calendar date, not required
 		calendar.setDays(7); // number of days displayed at a time, not required
-		calendar.setWidth("1000px");
-		calendar.setHeight("600px");
+		//calendar.setWidth("1000px");
+		//calendar.setHeight("600px");
+		calendar.setWidth("100%");
+		calendar.setHeight("100%");
 		settings = new CalendarSettings();
 		// Enable the Drag&Drop
 		settings.setEnableDragDrop(true);
@@ -84,7 +102,7 @@ public class Ui1 extends Composite {
 		CalendarFormat.INSTANCE.setNoon("12:00");
 		calendar.setSettings(settings);
 		calendar.setView(CalendarViews.DAY, 7);
-		myVerticalPanel.add(calendar);
+		mySimplePanel.add(calendar);
 
 		
 		
@@ -106,7 +124,12 @@ public class Ui1 extends Composite {
 		
 
 		
-		
+		datePicker.addValueChangeHandler(new ValueChangeHandler<Date>(){
+			public void onValueChange(ValueChangeEvent<Date> event) {
+				calendar.setDate(event.getValue());
+				calendar.setView(CalendarViews.DAY, 1);
+			}
+		});
 		
 		
 		
@@ -241,6 +264,15 @@ public class Ui1 extends Composite {
 			}
 
 			});
+		
+		calendar.addDateRequestHandler(new DateRequestHandler<Date>(){
+			  @Override
+			  public void onDateRequested(DateRequestEvent<Date> event) {
+			    //in this example we change to the DayView for the given date
+			    calendar.setView(CalendarViews.DAY, 1);
+			    calendar.setDate(event.getTarget());
+			  }
+			});
 
 	}
 
@@ -259,6 +291,7 @@ public class Ui1 extends Composite {
 
 	@UiHandler("b_day")
 	void onB_dayClick(ClickEvent event) {
+		datePicker.setValue(new Date(), true);
 		calendar.setView(CalendarViews.DAY, 1);
 	}
 
@@ -272,19 +305,28 @@ public class Ui1 extends Composite {
 		calendar.setView(CalendarViews.MONTH);
 		calendar.setTitle("Mein Kalender");
 	}
-
-	@UiHandler("label")
-	void onLabelClick(ClickEvent event) {
-		calendar.setView(CalendarViews.DAY, 1);
-
-		Appointment appt = new Appointment();
-		DateTimeFormat calformat = DateTimeFormat
-				.getFormat("yyyy-MM-dd hh:mm:ss");
-		appt.setStart(calformat.parse("2012-08-14 04:04:05"));
-		appt.setEnd(calformat.parse("2012-08-14 04:05:30"));
-		appt.setTitle("CCM20125000001");
-		appt.setStyle(AppointmentStyle.GREEN);
-		appt.setDescription("Billing");
-		calendar.addAppointment(appt);
+	@UiHandler("previsousMonthButton")
+	void onPrevisousMonthButtonClick(ClickEvent event) {
+	}
+	@UiHandler("previsousWeekButton")
+	void onPrevisousWeekButtonClick(ClickEvent event) {
+	}
+	@UiHandler("previsousDayButton")
+	void onPrevisousDayButtonClick(ClickEvent event) {
+		Date d = datePicker.getValue();
+		d.setDate(d.getDate()-1);
+		datePicker.setValue(d,true);
+	}
+	@UiHandler("nextDayButton")
+	void onNextDayButtonClick(ClickEvent event) {
+		Date d = datePicker.getValue();
+		d.setDate(d.getDate()+1);
+		datePicker.setValue(d,true);
+	}
+	@UiHandler("nextWeekButton")
+	void onNextWeekButtonClick(ClickEvent event) {
+	}
+	@UiHandler("nextMonthButton")
+	void onNextMonthButtonClick(ClickEvent event) {
 	}
 }
