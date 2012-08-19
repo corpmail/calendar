@@ -8,24 +8,11 @@
 		.myFlowPanel {
 			margin-bottom: 5px;
 		}
+		.HeaderPanel {
+			background-color: Silver;
+		}
 	</ui:style>
 	<g:HTMLPanel styleName="gwt-Label" ui:field="myHtmlPanel">
-		<g:VerticalPanel width="" height="" ui:field="myVerticalPanel" horizontalAlignment="ALIGN_RIGHT"/>
-		<g:VerticalPanel ui:field="myVerticalPanel2">
-			<g:HorizontalPanel horizontalAlignment="ALIGN_LEFT">
-				<g:Button text="DAY" ui:field="b_day"/>
-				<g:Button text="WEEK" ui:field="b_week"/>
-				<g:Button text="MONTH" ui:field="b_month"/>
-				<g:Button ui:field="previsousMonthButton" text="-Month"/>
-				<g:Button ui:field="previsousWeekButton" text="-Week"/>
-				<g:Button ui:field="previsousDayButton" text="-Day"/>
-				<g:Button ui:field="nextDayButton" text="Day+"/>
-				<g:Button ui:field="nextWeekButton" text="Week+"/>
-				<g:Button ui:field="nextMonthButton" text="Month+"/>
-			</g:HorizontalPanel>
-		</g:VerticalPanel>
-		<g:VerticalPanel ui:field="myVerticalPanel3"/>
-		<g:SimplePanel ui:field="mySimplePanel"/>
 		<g:DockPanel ui:field="mainLayoutPanel">
 			<g:Dock direction="SOUTH">
 				<g:AbsolutePanel ui:field="footerPanel"/>
@@ -38,11 +25,21 @@
 				</g:DockPanel>
 			</g:Dock>
 			<g:Dock direction="NORTH">
-				<g:AbsolutePanel>
-					<g:at left="0" top="0">
-						<g:FlexTable ui:field="headerPanelLayout"/>
-					</g:at>
-				</g:AbsolutePanel>
+				<g:AbsolutePanel ui:field="myNorthAbsolutPanel"/>
+			</g:Dock>
+			<g:Dock direction="NORTH" horizontalAlignment="ALIGN_RIGHT">
+				<g:HorizontalPanel horizontalAlignment="ALIGN_CENTER" ui:field="myButtonHorizontPanel" styleName="{style.HeaderPanel}">
+				<g:Button text="DAY" ui:field="b_day"/>
+				<g:Button text="WEEK" ui:field="b_week"/>
+				<g:Button text="MONTH" ui:field="b_month"/>
+				<g:SplitLayoutPanel width="100p%" height="1px"/>
+				<g:Button ui:field="previsousMonthButton" text="-Month"/>
+				<g:Button ui:field="previsousWeekButton" text="-Week"/>
+				<g:Button ui:field="previsousDayButton" text="-Day"/>
+				<g:Button ui:field="nextDayButton" text="Day+"/>
+				<g:Button ui:field="nextWeekButton" text="Week+"/>
+				<g:Button ui:field="nextMonthButton" text="Month+"/>
+			</g:HorizontalPanel>
 			</g:Dock>
 		</g:DockPanel>
 	</g:HTMLPanel>

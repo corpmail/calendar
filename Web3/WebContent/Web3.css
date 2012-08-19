@@ -42,7 +42,7 @@ h1 {
 	cursor: default;
 }
 .gwt-Button {
-	margin-right: 2px;
+	margin-right: 5px;
 }
 .gwt-ButtonDelete {
 	border: 1px solid;
@@ -50,3 +50,14 @@ h1 {
 	font-weight: bold;
 	background-color: lightpink;
 }
+.gwt-ButtonHeader {
+	background-color: floralwhite;
+	text-shadow: #C0C1C2 0px 2px 1px;
+	color: #1E2229;
+	font-size: 14px;
+	font-family: Helvetica, HelveticaNeueBoldCond, HelveticaNeueCondensed, HelveticaNeueThinCond, serif, Arial;
+	font-weight: 700;
+	letter-spacing: -0,366667px;
+	cursor: default;
+}
+

@@ -25,6 +25,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -46,6 +48,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class Ui1 extends Composite {
 
@@ -54,8 +57,6 @@ public class Ui1 extends Composite {
 			.create(GreetingService.class);
 	@UiField
 	HTMLPanel myHtmlPanel;
-	@UiField
-	VerticalPanel myVerticalPanel;
 	@UiField
 	Button b_day;
 	@UiField
@@ -69,13 +70,11 @@ public class Ui1 extends Composite {
 	@UiField Button nextWeekButton;
 	@UiField Button nextMonthButton;
 	@UiField DatePicker datePicker;
-	@UiField VerticalPanel myVerticalPanel2;
-	@UiField VerticalPanel myVerticalPanel3;
-	@UiField SimplePanel mySimplePanel;
 	@UiField DockPanel mainLayoutPanel;
-	@UiField FlexTable headerPanelLayout;
 	@UiField AbsolutePanel footerPanel;
 	@UiField DockPanel dateLayoutPanel;
+	@UiField HorizontalPanel myButtonHorizontPanel;
+	@UiField AbsolutePanel myNorthAbsolutPanel;
 	Calendar calendar = null;
 	CalendarSettings settings = null;
 
@@ -110,10 +109,10 @@ public class Ui1 extends Composite {
 		CalendarFormat.INSTANCE.setNoon("12:00");
 		calendar.setSettings(settings);
 		calendar.setView(CalendarViews.DAY, 7);
-		//mySimplePanel.add(calendar);
+		calendar.setHeight(Window.getClientHeight()-70+"px");
 		mainLayoutPanel.add(calendar, DockPanel.CENTER);
 
-		
+		System.out.println("Hight Calender: " +calendar.getParent().toString());
 		
 		greetingService.getAppointments("asdf", new AsyncCallback<ArrayList<Appointment>>() {
             public void onFailure(Throwable caught) {
@@ -212,32 +211,31 @@ public class Ui1 extends Composite {
 			@Override
 			public void onUpdate(UpdateEvent<Appointment> event) {
 				// TODO Auto-generated method stub
-				boolean commit = Window
-						.confirm("Are you sure you want to update the appointment \n"
-								+ "NAME:"
-								+ event.getTarget().getTitle()
-								+ "\n"
-								+ "START:"
-								+ event.getTarget().getStart().toString()
-								+ "\n"
-								+ "END:"
-								+ event.getTarget().getEnd().toString() + "");
+				boolean commit = true;
 				
+//				commit = Window
+//						.confirm("Are you sure you want to update the appointment \n"
+//								+ "Titel:"
+//								+ event.getTarget().getTitle()
+//								+ "\n"
+//								+ "START:"
+//								+ event.getTarget().getStart().toString()
+//								+ "\n"
+//								+ "END:"
+//								+ event.getTarget().getEnd().toString() + "");
 				
-				
-				
-				Appointment app = event.getTarget();
-				calendar.removeAppointment(app);
-				app.setStart(event.getTarget().getStart());
-				app.setEnd(event.getTarget().getEnd());
-				new MyApptHelper(calendar).updateAppointment(app);
-				
-				//
-				//calendar.addAppointment(app);
+
 
 				if (!commit) {
 					event.setCancelled(true); // Cancel Appointment update
 					calendar.resetSelectedAppointment();
+				}
+				else{
+					Appointment app = event.getTarget();
+					calendar.removeAppointment(app);
+					app.setStart(event.getTarget().getStart());
+					app.setEnd(event.getTarget().getEnd());
+					new MyApptHelper(calendar).updateAppointment(app);
 				}
 
 			}
@@ -282,6 +280,16 @@ public class Ui1 extends Composite {
 			    calendar.setDate(event.getTarget());
 			  }
 			});
+		
+		//window events to handle resizing
+		Window.enableScrolling(false);
+		Window.addResizeHandler(new ResizeHandler(){
+			public void onResize(ResizeEvent event) {
+				int h = event.getHeight();
+				calendar.setHeight(h-70+"px");
+
+			}
+		});
 
 	}
 

@@ -186,7 +186,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 				Appointment appt = new Appointment();
 				String AppId=""+rs.getInt("id");
 				appt.setId(AppId);
-				appt.setTitle(rs.getString("bezeichnung") + "ID:" + AppId);
+				appt.setTitle(rs.getString("bezeichnung"));
 				appt.setDescription(rs.getString("bezeichnung_lang"));
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    		appt.setStart(simpleDateFormat.parse(rs.getString("startdate")));
@@ -248,7 +248,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 				//appt = new Appointment();
 				String AppId=""+rs.getInt("id");
 				appt.setId(AppId);
-				appt.setTitle(rs.getString("bezeichnung") + "ID:" + AppId);
+				appt.setTitle(rs.getString("bezeichnung"));
 				appt.setDescription(rs.getString("bezeichnung_lang"));
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    		appt.setStart(simpleDateFormat.parse(rs.getString("startdate")));
