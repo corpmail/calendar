@@ -151,38 +151,9 @@ public class MyDialogBox1 extends DialogBox {
 			app.setStart(this.myVon.getValue());
 			app.setEnd(this.myBis.getValue());
 
-			this.greetingService.saveAppointmen(app,
-					new AsyncCallback<Integer>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("RPC to sendEmail() failed.");
-						}
-
-						@Override
-						public void onSuccess(Integer result) {
-							System.out
-									.println("greetingService.getAppointments2x"
-											+ result);
-							greetingService.getAppointmentById(result,
-									new AsyncCallback<Appointment>() {
-										public void onFailure(Throwable caught) {
-											Window.alert("RPC to getAppointments() failed.");
-										}
-
-										@Override
-										public void onSuccess(Appointment result) {
-											System.out
-													.println("greetingService.getAppointments3x"
-															+ result.getTitle());
-											// ArrayList<Appointment> l1 = null;
-											// cal.suspendLayout();
-											cal.addAppointment(result);
-											// cal.resumeLayout();
-										}
-
-									});
-						}
-
-					});
+			//insertNewAppointment(app);
+			new MyApptHelper(this.cal).insertNewAppointment(app);
+			
 		} else { //Update
 			
 
@@ -195,44 +166,84 @@ public class MyDialogBox1 extends DialogBox {
 			cal.removeAppointment(this.appt);
 			
 			// 2)Dann den Datenbank-Update machen
-			this.greetingService.updateAppointmen(this.appt,
-					new AsyncCallback<Integer>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("RPC to sendEmail() failed.");
-							
-						}
-
-						@Override
-						public void onSuccess(Integer result) {
-							System.out
-									.println("greetingService.getAppointments2"
-											+ result);
-							greetingService.getAppointmentById(result,
-									new AsyncCallback<Appointment>() {
-										public void onFailure(Throwable caught) {
-											Window.alert("RPC to getAppointments() failed.");
-										}
-
-										@Override
-										public void onSuccess(Appointment result) {
-											System.out
-													.println("greetingService.getAppointments3"
-															+ result.getTitle());
-
-											// 3)Dann den Appt in den View einfügen
-											cal.addAppointment(result);
-										}
-
-									});
-						}
-
-					});
+			//updateAppointment(this.appt);
+			new MyApptHelper(this.cal).updateAppointment(this.appt);
 
 		}
 
 		this.hide();
 
 	}
+
+//	public void insertNewAppointment(final Appointment app) {
+//		this.greetingService.saveAppointmen(app,
+//				new AsyncCallback<Integer>() {
+//					public void onFailure(Throwable caught) {
+//						Window.alert("RPC to sendEmail() failed.");
+//					}
+//
+//					@Override
+//					public void onSuccess(Integer result) {
+//						System.out
+//								.println("greetingService.getAppointments2x"
+//										+ result);
+//						greetingService.getAppointmentById(result,
+//								new AsyncCallback<Appointment>() {
+//									public void onFailure(Throwable caught) {
+//										Window.alert("RPC to getAppointments() failed.");
+//									}
+//
+//									@Override
+//									public void onSuccess(Appointment result) {
+//										System.out
+//												.println("greetingService.getAppointments3x"
+//														+ result.getTitle());
+//										// ArrayList<Appointment> l1 = null;
+//										// cal.suspendLayout();
+//										cal.addAppointment(result);
+//										// cal.resumeLayout();
+//									}
+//
+//								});
+//					}
+//
+//				});
+//	}
+
+//	public void updateAppointment(Appointment appt) {
+//		this.greetingService.updateAppointmen(appt,
+//				new AsyncCallback<Integer>() {
+//					public void onFailure(Throwable caught) {
+//						Window.alert("RPC to sendEmail() failed.");
+//						
+//					}
+//
+//					@Override
+//					public void onSuccess(Integer result) {
+//						System.out
+//								.println("greetingService.getAppointments2"
+//										+ result);
+//						greetingService.getAppointmentById(result,
+//								new AsyncCallback<Appointment>() {
+//									public void onFailure(Throwable caught) {
+//										Window.alert("RPC to getAppointments() failed.");
+//									}
+//
+//									@Override
+//									public void onSuccess(Appointment result) {
+//										System.out
+//												.println("greetingService.getAppointments3"
+//														+ result.getTitle());
+//
+//										// 3)Dann den Appt in den View einfügen
+//										cal.addAppointment(result);
+//									}
+//
+//								});
+//					}
+//
+//				});
+//	}
 
 	@UiHandler("buttonCancel")
 	void onButtonCancelClick(ClickEvent event) {
