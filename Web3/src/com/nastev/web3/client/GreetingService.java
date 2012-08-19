@@ -24,4 +24,5 @@ public interface GreetingService extends RemoteService {
 
 	int saveAppointmen(Appointment appt) throws IllegalArgumentException;
 	Boolean deleteAppointmen(Appointment appt) throws IllegalArgumentException;
+	int updateAppointmen(Appointment appt) throws IllegalArgumentException;
 }

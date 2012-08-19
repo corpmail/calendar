@@ -21,6 +21,8 @@ import com.bradrydzewski.gwt.calendar.client.event.UpdateEvent;
 import com.bradrydzewski.gwt.calendar.client.event.UpdateHandler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.OpenEvent;
+import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
@@ -92,7 +94,7 @@ public class Ui1 extends Composite {
             }
 			@Override
 			public void onSuccess(ArrayList<Appointment> result) {
-				System.out.println("greetingService.getAppointments");
+				//System.out.println("greetingService.getAppointments");
 				//ArrayList<Appointment> l1 = null;
 				calendar.suspendLayout();
 				calendar.addAppointments(result);
@@ -210,7 +212,8 @@ public class Ui1 extends Composite {
 			    boolean commit = Window.confirm("Are you sure you want to delete?");
 			    if(commit==false) {
 			      event.setCancelled(true);
-			    } else {
+			    } else { 
+			    	// anscheinend ist kein explizites calendar.removeAppointment nötig, das mach dieser Hanedler selbst
 			    	final GreetingServiceAsync greetingService = GWT
 			    			.create(GreetingService.class);
 			    	greetingService.deleteAppointmen(event.getTarget(), new AsyncCallback<Boolean>() {
@@ -223,15 +226,26 @@ public class Ui1 extends Composite {
 
 						@Override
 						public void onSuccess(Boolean result) {
-							// TODO Auto-generated method stub
-							//calendar.removeAppointment(event.getTarget());
 							
 						}
 			    		
 			    	});
-//			    	calendar.removeAppointment(event.getTarget());
 			    }
 			  }                     
+			});
+		
+		calendar.addOpenHandler(new OpenHandler<Appointment>(){
+
+			@Override
+			public void onOpen(OpenEvent<Appointment> event) {
+				// TODO Auto-generated method stub
+				//Window.confirm("Are you sure you want to open?");
+				MyDialogBox1 box1 = new MyDialogBox1(calendar, event.getTarget());
+				//MyDialogBox2 box1 = new MyDialogBox2();
+				box1.show();
+				
+			}
+
 			});
 
 	}

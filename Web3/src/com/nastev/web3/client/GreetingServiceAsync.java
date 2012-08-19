@@ -24,4 +24,6 @@ public interface GreetingServiceAsync {
 	void getAppointmentById(int Id, AsyncCallback<Appointment> callback);
 
 	void deleteAppointmen(Appointment appt, AsyncCallback<Boolean> callback);
+
+	void updateAppointmen(Appointment appt, AsyncCallback<Integer> callback);
 }

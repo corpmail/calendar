@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.nastev.web3.server.MFQueries;
 
@@ -22,7 +23,6 @@ public class MysqlHelper {
 	        private Connection con = null;
 	        private InitialContext ctx = null;
 	        private DataSource ds = null;
-	        //Logger logger = Logger.getLogger("myLogger");
 
 	        public static MysqlHelper getHelper(){
 	                if (helper == null) {
@@ -98,6 +98,9 @@ public class MysqlHelper {
 	        
 	        public int executeInsert(MFQueries query, String...args) throws Exception{
                 PreparedStatement pstmt = con.prepareStatement(query.getSqlQuery());
+                System.out.println("MysqlHelper|executeInsert|statement: "+query.getSqlQuery());
+                System.out.println("MysqlHelper|executeInsert|args.leng: "+args.length);
+                
                 for(int i=0;i<query.getTypes().length;i++){
                         switch (query.getTypes()[i]) {
                         case CHAR:
@@ -112,7 +115,13 @@ public class MysqlHelper {
                                 break;
                         }
                 }
+                
+
+                System.out.println("MysqlHelper|executeInsert|pstmt.toString: "+pstmt.toString());
                 int autoIncKeyFromApi = 0;
+                
+
+
                 
                 int count = pstmt.executeUpdate();
                 //ResultSet rs = pstmt.getGeneratedKeys();
@@ -122,7 +131,7 @@ public class MysqlHelper {
                 } else {
 
                 }
-                System.out.println("executeInsert1:");
+                //System.out.println("executeInsert1:");
                 //logger.log(Level.SEVERE, "executeInsert2:");
                 GWT.log("executeInsert3:");
                 

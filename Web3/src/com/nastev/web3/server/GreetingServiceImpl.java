@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.nastev.web3.client.GreetingService;
 import com.nastev.web3.shared.FieldVerifier;
+import com.allen_sauer.gwt.log.client.Log;
 //import com.nastev.web3.shared.MyAppointment;
 import com.bradrydzewski.gwt.calendar.client.Appointment;
 import com.bradrydzewski.gwt.calendar.client.AppointmentStyle;
@@ -210,6 +211,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 	public int saveAppointmen(Appointment appt)
 			throws IllegalArgumentException {
 		//logger.log(Level.SEVERE, "saveAppointmen_log "+appt.getTitle());
+		Log.debug("This is a 'DEBUG' test message from the GSImplementation");
 		MFQueries query = MFQueries.ADD_APPOINTMENT;
 		
 		java.util.Date dt_start = appt.getStart();
@@ -287,5 +289,34 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		}else{
 			return false;
 		}
+	}
+
+	@Override
+	public int updateAppointmen(Appointment appt)
+			throws IllegalArgumentException {
+		Log.debug("This is a 'DEBUG' test message from the GreetingServiceImpl_updateAppointmen");
+		MFQueries query = MFQueries.UPD_APPOINTMENT;
+		
+		java.util.Date dt_start = appt.getStart();
+		java.util.Date dt_end = appt.getEnd();
+		java.text.SimpleDateFormat sdf =   new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dt_start_converted = sdf.format(dt_start);
+		String dt_end_converted = sdf.format(dt_end);
+		String id = appt.getId();
+
+		System.out.println("ARGS"+appt.getTitle()+" "+appt.getDescription()+" "+dt_start_converted+" "+dt_end_converted+" "+id);
+		String[] args = new String[]{appt.getTitle(),appt.getDescription(),dt_start_converted,dt_end_converted,id};
+
+		try {
+			mysql.executeInsert(query, args);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Integer.parseInt(id);
+		
 	}
 }
