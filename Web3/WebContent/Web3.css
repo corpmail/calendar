@@ -44,3 +44,9 @@ h1 {
 .gwt-Button {
 	margin-right: 2px;
 }
+.gwt-ButtonDelete {
+	border: 1px solid;
+	font-family: Calibri;
+	font-weight: bold;
+	background-color: lightpink;
+}

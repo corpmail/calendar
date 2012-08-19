@@ -47,6 +47,9 @@
 			<g:at left="63" top="140">
 				<g:Label text="Text"/>
 			</g:at>
+			<g:at left="486" top="358">
+				<g:Button ui:field="buttonDelete" styleName="gwt-ButtonDelete" text="DELETE">Delete!</g:Button>
+			</g:at>
 		</g:AbsolutePanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

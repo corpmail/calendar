@@ -139,14 +139,14 @@ public class Ui1 extends Composite {
 
 		// calendar.addCreateHandler(new CreateHandler<Appointment>() {
 		// @Override
-		// public void onCreate(CreateEvent<Appointment> event) {
+		// public void onCreate(CreateEvent<Appointment> createEvent) {
 		// boolean commit = Window
 		// .confirm("Are you sure you want to create a new appointment");
 		// if (!commit) {
-		// event.setCancelled(true);
+		// createEvent.setCancelled(true);
 		// System.out.println("Cancelled Appointment creation");
 		// } else {
-		// Appointment app = event.getTarget();
+		// Appointment app = createEvent.getTarget();
 		// app.setTitle("New Appointment");
 		// calendar.addAppointment(app);
 		// }
@@ -164,12 +164,12 @@ public class Ui1 extends Composite {
 				// boolean commit = Window
 				// .confirm("Are you sure you want to create a new appointment");
 				// if (!commit) {
-				// event.setCancelled(true);
+				// createEvent.setCancelled(true);
 				// System.out.println("Cancelled Appointment creation");
 				// } else {
-				// Appointment app = event.getTarget();
-				// app.setStart(event.getTarget().getStart());
-				// app.setEnd(event.getTarget().getEnd());
+				// Appointment app = createEvent.getTarget();
+				// app.setStart(createEvent.getTarget().getStart());
+				// app.setEnd(createEvent.getTarget().getEnd());
 				// app.setTitle("New Appointment");
 				// calendar.addAppointment(app);
 				// }
@@ -190,12 +190,18 @@ public class Ui1 extends Composite {
 								+ "\n"
 								+ "END:"
 								+ event.getTarget().getEnd().toString() + "");
-
+				
+				
+				
+				
 				Appointment app = event.getTarget();
 				calendar.removeAppointment(app);
 				app.setStart(event.getTarget().getStart());
 				app.setEnd(event.getTarget().getEnd());
-				calendar.addAppointment(app);
+				new MyApptHelper(calendar).updateAppointment(app);
+				
+				//
+				//calendar.addAppointment(app);
 
 				if (!commit) {
 					event.setCancelled(true); // Cancel Appointment update
@@ -213,23 +219,10 @@ public class Ui1 extends Composite {
 			    if(commit==false) {
 			      event.setCancelled(true);
 			    } else { 
+			    	
+			    	new MyApptHelper(calendar).deleteAppointment(event.getTarget());
 			    	// anscheinend ist kein explizites calendar.removeAppointment nötig, das mach dieser Hanedler selbst
-			    	final GreetingServiceAsync greetingService = GWT
-			    			.create(GreetingService.class);
-			    	greetingService.deleteAppointmen(event.getTarget(), new AsyncCallback<Boolean>() {
 
-						@Override
-						public void onFailure(Throwable caught) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void onSuccess(Boolean result) {
-							
-						}
-			    		
-			    	});
 			    }
 			  }                     
 			});
@@ -240,6 +233,7 @@ public class Ui1 extends Composite {
 			public void onOpen(OpenEvent<Appointment> event) {
 				// TODO Auto-generated method stub
 				//Window.confirm("Are you sure you want to open?");
+				//MyDialogBox1 box1 = new MyDialogBox1(calendar, event.getTarget(), event);
 				MyDialogBox1 box1 = new MyDialogBox1(calendar, event.getTarget());
 				//MyDialogBox2 box1 = new MyDialogBox2();
 				box1.show();

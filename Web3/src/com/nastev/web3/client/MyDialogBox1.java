@@ -9,6 +9,7 @@ import com.bradrydzewski.gwt.calendar.client.Calendar;
 import com.bradrydzewski.gwt.calendar.client.event.CreateEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -50,8 +51,10 @@ public class MyDialogBox1 extends DialogBox {
 	ListBox myList;
 	@UiField
 	TextArea myBeschreibungLang;
+	@UiField Button buttonDelete;
 
-	CreateEvent<Appointment> event;
+	CreateEvent<Appointment> createEvent;
+	//OpenEvent<Appointment> openEvent;
 	Calendar cal;
 	Appointment appt;
 	Boolean isUPDATE = false;  //Ein Schalter um zu unterscheiden ob es un ein SQL-Update, oder ein SQL-Insert handelt
@@ -71,23 +74,27 @@ public class MyDialogBox1 extends DialogBox {
 	public MyDialogBox1(Calendar cal, CreateEvent<Appointment> event) {
 		this.isUPDATE = false;
 		this.cal = cal;
-		this.event = event;
+		this.createEvent = event;
 		setWidget(uiBinder.createAndBindUi(this));
 		myAbsolutePanel.setWidth("603px");
 		this.center();
-		this.myVon.setValue(this.event.getTarget().getStart());
-		this.myBis.setValue(this.event.getTarget().getEnd());
+		this.myVon.setValue(this.createEvent.getTarget().getStart());
+		this.myBis.setValue(this.createEvent.getTarget().getEnd());
 
 		this.myList.addItem("Training");
 		this.myList.addItem("Spielen");
 		this.myList.addItem("Sex");
+		this.buttonDelete.setEnabled(false);
+		this.buttonDelete.setVisible(false);
 
 	}
 
+	//public MyDialogBox1(Calendar cal, Appointment appt, OpenEvent<Appointment> event) {
 	public MyDialogBox1(Calendar cal, Appointment appt) {
 		this.isUPDATE = true;
 		this.cal = cal;
 		this.appt = appt;
+		//this.openEvent = event;
 		setWidget(uiBinder.createAndBindUi(this));
 		myAbsolutePanel.setWidth("603px");
 		this.center();
@@ -99,6 +106,7 @@ public class MyDialogBox1 extends DialogBox {
 		this.myList.addItem("Training");
 		this.myList.addItem("Spielen");
 		this.myList.addItem("Sex");
+		this.buttonOK.setText("Termin aktualisieren");
 
 	}
 
@@ -130,16 +138,6 @@ public class MyDialogBox1 extends DialogBox {
 		// this.cal.addAppointment(app);
 		// this.hide();
 
-//		final Appointment app = new Appointment();
-//		app.setTitle(myBeschreibung.getText());
-//		app.setDescription(myBeschreibungLang.getText());
-//		app.setStart(this.myVon.getValue());
-//		app.setEnd(this.myBis.getValue());
-//		System.out.println("Debugid:0");
-//		System.out.println("Debugid:1"+this.event.getTarget().getTitle());
-//		String id = this.event.getTarget().getId();
-//		System.out.println("Debugid:"+id);
-//		app.setId(id);
 		
 		if (!this.isUPDATE) {  //INSERT
 			//Log.debug("This is a 'DEBUG' test message from the DialogBox1_buttonOK_updateFalse1");
@@ -175,82 +173,25 @@ public class MyDialogBox1 extends DialogBox {
 
 	}
 
-//	public void insertNewAppointment(final Appointment app) {
-//		this.greetingService.saveAppointmen(app,
-//				new AsyncCallback<Integer>() {
-//					public void onFailure(Throwable caught) {
-//						Window.alert("RPC to sendEmail() failed.");
-//					}
-//
-//					@Override
-//					public void onSuccess(Integer result) {
-//						System.out
-//								.println("greetingService.getAppointments2x"
-//										+ result);
-//						greetingService.getAppointmentById(result,
-//								new AsyncCallback<Appointment>() {
-//									public void onFailure(Throwable caught) {
-//										Window.alert("RPC to getAppointments() failed.");
-//									}
-//
-//									@Override
-//									public void onSuccess(Appointment result) {
-//										System.out
-//												.println("greetingService.getAppointments3x"
-//														+ result.getTitle());
-//										// ArrayList<Appointment> l1 = null;
-//										// cal.suspendLayout();
-//										cal.addAppointment(result);
-//										// cal.resumeLayout();
-//									}
-//
-//								});
-//					}
-//
-//				});
-//	}
 
-//	public void updateAppointment(Appointment appt) {
-//		this.greetingService.updateAppointmen(appt,
-//				new AsyncCallback<Integer>() {
-//					public void onFailure(Throwable caught) {
-//						Window.alert("RPC to sendEmail() failed.");
-//						
-//					}
-//
-//					@Override
-//					public void onSuccess(Integer result) {
-//						System.out
-//								.println("greetingService.getAppointments2"
-//										+ result);
-//						greetingService.getAppointmentById(result,
-//								new AsyncCallback<Appointment>() {
-//									public void onFailure(Throwable caught) {
-//										Window.alert("RPC to getAppointments() failed.");
-//									}
-//
-//									@Override
-//									public void onSuccess(Appointment result) {
-//										System.out
-//												.println("greetingService.getAppointments3"
-//														+ result.getTitle());
-//
-//										// 3)Dann den Appt in den View einfügen
-//										cal.addAppointment(result);
-//									}
-//
-//								});
-//					}
-//
-//				});
-//	}
 
 	@UiHandler("buttonCancel")
 	void onButtonCancelClick(ClickEvent event) {
-		this.event.setCancelled(true);
+		if(this.isUPDATE){
+			this.hide();
+		}
+		else {
+		this.createEvent.setCancelled(true);
 		this.cal.doLayout();
 		this.hide();
+		}
 
 	}
 
+	@UiHandler("buttonDelete")
+	void onButtonDeleteClick(ClickEvent event) {
+		new MyApptHelper(cal).deleteAppointment(this.appt);
+		cal.removeAppointment(this.appt);
+		this.hide();
+	}
 }
