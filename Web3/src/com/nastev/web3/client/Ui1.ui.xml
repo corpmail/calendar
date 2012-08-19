@@ -10,9 +10,7 @@
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="gwt-Label" ui:field="myHtmlPanel">
-		<g:VerticalPanel width="" height="" ui:field="myVerticalPanel" horizontalAlignment="ALIGN_RIGHT">
-			<p1:DatePicker ui:field="datePicker"/>
-		</g:VerticalPanel>
+		<g:VerticalPanel width="" height="" ui:field="myVerticalPanel" horizontalAlignment="ALIGN_RIGHT"/>
 		<g:VerticalPanel ui:field="myVerticalPanel2">
 			<g:HorizontalPanel horizontalAlignment="ALIGN_LEFT">
 				<g:Button text="DAY" ui:field="b_day"/>
@@ -28,5 +26,24 @@
 		</g:VerticalPanel>
 		<g:VerticalPanel ui:field="myVerticalPanel3"/>
 		<g:SimplePanel ui:field="mySimplePanel"/>
+		<g:DockPanel ui:field="mainLayoutPanel">
+			<g:Dock direction="SOUTH">
+				<g:AbsolutePanel ui:field="footerPanel"/>
+			</g:Dock>
+			<g:Dock direction="WEST" verticalAlignment="ALIGN_BOTTOM">
+				<g:DockPanel ui:field="dateLayoutPanel" width="168px">
+					<g:Dock direction="SOUTH" verticalAlignment="ALIGN_BOTTOM">
+						<p1:DatePicker ui:field="datePicker"/>
+					</g:Dock>
+				</g:DockPanel>
+			</g:Dock>
+			<g:Dock direction="NORTH">
+				<g:AbsolutePanel>
+					<g:at left="0" top="0">
+						<g:FlexTable ui:field="headerPanelLayout"/>
+					</g:at>
+				</g:AbsolutePanel>
+			</g:Dock>
+		</g:DockPanel>
 	</g:HTMLPanel>
 </ui:UiBinder> 

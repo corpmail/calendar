@@ -43,6 +43,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 
 public class Ui1 extends Composite {
 
@@ -69,6 +72,10 @@ public class Ui1 extends Composite {
 	@UiField VerticalPanel myVerticalPanel2;
 	@UiField VerticalPanel myVerticalPanel3;
 	@UiField SimplePanel mySimplePanel;
+	@UiField DockPanel mainLayoutPanel;
+	@UiField FlexTable headerPanelLayout;
+	@UiField AbsolutePanel footerPanel;
+	@UiField DockPanel dateLayoutPanel;
 	Calendar calendar = null;
 	CalendarSettings settings = null;
 
@@ -78,6 +85,7 @@ public class Ui1 extends Composite {
 	public Ui1() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
+		mainLayoutPanel.setWidth("100%");
 		datePicker.setValue(new Date());
 		calendar = new Calendar();
 		calendar.setDate(new Date()); // calendar date, not required
@@ -102,7 +110,8 @@ public class Ui1 extends Composite {
 		CalendarFormat.INSTANCE.setNoon("12:00");
 		calendar.setSettings(settings);
 		calendar.setView(CalendarViews.DAY, 7);
-		mySimplePanel.add(calendar);
+		//mySimplePanel.add(calendar);
+		mainLayoutPanel.add(calendar, DockPanel.CENTER);
 
 		
 		
